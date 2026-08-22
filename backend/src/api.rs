@@ -1241,14 +1241,12 @@ async fn ping_plan(
         }
     };
 
-    if let Err(e) = sqlx::query(
-        "UPDATE plans SET last_ping = $1, accrued_yield = $2 WHERE id = $3",
-    )
-    .bind(current_time)
-    .bind(new_accrued_yield)
-    .bind(plan.id)
-    .execute(&mut *tx)
-    .await
+    if let Err(e) = sqlx::query("UPDATE plans SET last_ping = $1, accrued_yield = $2 WHERE id = $3")
+        .bind(current_time)
+        .bind(new_accrued_yield)
+        .bind(plan.id)
+        .execute(&mut *tx)
+        .await
     {
         return (
             StatusCode::INTERNAL_SERVER_ERROR,
